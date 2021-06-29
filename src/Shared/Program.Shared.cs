@@ -54,6 +54,29 @@ namespace Microsoft.VisualStudio.SlnGen
         /// <returns>Zero if the program executed successfully, otherwise a non-zero value.</returns>
         public static int Main(string[] args)
         {
+#if NETCOREAPP
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && TryFindMSBuildOnPath(out string _))
+            {
+                FileInfo fileInfo = new FileInfo(Assembly.GetExecutingAssembly().Location);
+
+                Process process = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        Arguments = string.Join(" ", Environment.GetCommandLineArgs().Skip(1)),
+                        FileName = Path.GetFullPath(Path.Combine(fileInfo.DirectoryName, "..", "..", "net472", "any", "slngen.exe")),
+                        UseShellExecute = false,
+                    },
+                };
+
+                process.Start();
+
+                process.WaitForExit();
+
+                return process.ExitCode;
+            }
+#endif
+
             CurrentDevelopmentEnvironment = LoadDevelopmentEnvironment();
 
             if (!CurrentDevelopmentEnvironment.Success || CurrentDevelopmentEnvironment.Errors.Count > 0)

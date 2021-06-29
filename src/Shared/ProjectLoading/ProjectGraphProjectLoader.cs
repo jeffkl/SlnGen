@@ -3,10 +3,12 @@
 // Licensed under the MIT license.
 
 #if !NET461
+
 using Microsoft.Build.Definition;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Graph;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -36,6 +38,11 @@ namespace Microsoft.VisualStudio.SlnGen.ProjectLoading
         /// <inheritdoc />
         public void LoadProjects(IEnumerable<string> projectPaths, ProjectCollection projectCollection, IDictionary<string, string> globalProperties)
         {
+            var buildEnvironment = typeof(ProjectCollection).Assembly.GetType("Microsoft.Build.Shared.BuildEnvironmentHelper").GetProperty("Instance").GetValue(null);
+
+            var msbuildToolsDirectory32Property = typeof(ProjectCollection).Assembly.GetType("Microsoft.Build.Shared.BuildEnvironment").GetFields(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).FirstOrDefault(i => i.Name.Contains("MSBuildToolsDirectory32"));
+
+            // msbuildToolsDirectory32Property.SetValue(buildEnvironment, @"C:\Program Files\dotnet\sdk\3.1.410");
             ICollection<ProjectGraphEntryPoint> entryProjects = projectPaths.Select(i => new ProjectGraphEntryPoint(i, globalProperties)).ToList();
 
             ProjectGraph unused = new ProjectGraph(entryProjects, projectCollection, CreateProjectInstance);
@@ -62,4 +69,5 @@ namespace Microsoft.VisualStudio.SlnGen.ProjectLoading
         }
     }
 }
+
 #endif

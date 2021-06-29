@@ -67,7 +67,7 @@ namespace Microsoft.VisualStudio.SlnGen
             {
                 return new DevelopmentEnvironment
                 {
-                    MSBuildExe = new FileInfo(msbuildExePath),
+                    MSBuildExe = new FileInfo(Environment.Is64BitProcess ? Path.Combine(Path.GetDirectoryName(msbuildExePath), "amd64", "MSBuild.exe") : msbuildExePath),
                     VisualStudio = VisualStudioConfiguration.GetInstanceForPath(msbuildExePath),
                 };
             }
