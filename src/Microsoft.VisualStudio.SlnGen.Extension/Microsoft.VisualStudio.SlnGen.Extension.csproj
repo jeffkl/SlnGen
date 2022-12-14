@@ -44,6 +44,7 @@
     <EmbeddedResource Update="VSPackage.resx" MergeWithCTO="true" Generator="ResXFileCodeGenerator" LastGenOutput="VSPackage.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <FilesToSign Include="$(IntermediateOutputPath)$(TargetName)$(TargetExt)" Authenticode="Microsoft400" StrongName="StrongName" />
     <FilesToSign Include="$(TargetVsixContainer)" Authenticode="VsixSHA2" />
   </ItemGroup>
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />

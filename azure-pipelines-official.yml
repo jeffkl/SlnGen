@@ -11,7 +11,6 @@ variables:
   DotNet7Version: '7.x'
   DotNet8Version: '8.x'
   MSBuildArgs: '"/Property:Platform=$(BuildPlatform);Configuration=$(BuildConfiguration)" "/BinaryLogger:$(Build.SourcesDirectory)\$(ArtifactsDirectoryName)\msbuild.binlog"'
-  SignType: 'Test'
 
 trigger:
   batch: true
